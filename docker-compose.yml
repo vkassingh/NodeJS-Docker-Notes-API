@@ -1,0 +1,21 @@
+
+
+services:
+  # Node.js API service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000" # Host_Port:Container_Port - Map port 5000 on host to container port 5000
+    environment:
+      NODE_ENV: production # Set to production for container environment unless you specifically need dev tools
+      PORT: 5000
+      # Pass the full MongoDB Atlas URI directly
+      MONGODB_URI: ${MONGODB_URI} # Docker Compose will pick this from your .env file
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    volumes:
+      # Optional: Mount your source code for development (hot-reloading)
+      # For production, remove this to use the built image layers
+      - .:/app
+      - /app/node_modules # Important: Exclude node_modules from host mount to prevent overwriting
